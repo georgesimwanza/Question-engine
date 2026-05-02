@@ -91,7 +91,7 @@ export default function Form() {
   async function saveForm() {
     setSaving(true);
     try {
-      const res = await fetch('/api/form', {
+      const res = await fetch('/api/forms', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ title, description, questions }),
@@ -175,10 +175,16 @@ export default function Form() {
         <button className={style.clearBtn} onClick={clearForm}>
           Clear form
         </button>
-        {savedId && (
-          <span style={{ fontSize: 13, color: '#555' }}>
-            ✓ Saved — ID: {savedId}
-          </span>
+      {savedId && (
+          <div style={{ fontSize: 13, color: '#555', marginTop: 8 }}>
+            ✓ Saved —{' '}
+            <a href={`/Fill_out/${savedId}`} target="_blank" style={{ color: '#673ab7', marginRight: 12 }}>
+              Share link →
+            </a>
+            <a href={`/responses/${savedId}`} target="_blank" style={{ color: '#673ab7' }}>
+              View responses →
+            </a>
+          </div>
         )}
       </div>
 

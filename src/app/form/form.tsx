@@ -39,8 +39,8 @@ export default function Form() {
   const [questions, setQuestions] = useState<Question[]>([
     { id: nextId++, label: 'Question', type: 'short', required: false, options: ['Option 1'] },
   ]);
-  const [saving, setSaving] = useState(false);         
-  const [savedId, setSavedId] = useState<string | null>(null); 
+  const [saving, setSaving] = useState(false);
+  const [savedId, setSavedId] = useState<string | null>(null);
 
   function addQuestion() {
     setQuestions(prev => [
@@ -87,11 +87,10 @@ export default function Form() {
     );
   }
 
-  // NEW
   async function saveForm() {
     setSaving(true);
     try {
-      const res = await fetch('/api/form', {
+      const res = await fetch('/api/forms', { // ← fixed: was /api/form
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ title, description, questions }),
@@ -110,7 +109,6 @@ export default function Form() {
     }
   }
 
-  // NEW
   function clearForm() {
     setTitle('Untitled form');
     setDescription('Form description');
@@ -163,7 +161,6 @@ export default function Form() {
         </button>
       </div>
 
-      {/* UPDATED submit bar */}
       <div className={style.submitBar}>
         <button
           className={style.submitBtn}
@@ -175,10 +172,16 @@ export default function Form() {
         <button className={style.clearBtn} onClick={clearForm}>
           Clear form
         </button>
-        {savedId && (
-          <span style={{ fontSize: 13, color: '#555' }}>
-            ✓ Saved — ID: {savedId}
-          </span>
+        {savedId && (  // ← updated: now shows two links
+          <div style={{ fontSize: 13, color: '#555', marginTop: 8 }}>
+            ✓ Saved —{' '}
+            <a href={`/Fill_out/${savedId}`} target="_blank" style={{ color: '#673ab7', marginRight: 12 }}>
+              Share link →
+            </a>
+            <a href={`/responses/${savedId}`} target="_blank" style={{ color: '#673ab7' }}>
+              View responses →
+            </a>
+          </div>
         )}
       </div>
 
@@ -258,70 +261,35 @@ function AnswerPreview({
   onUpdateOption: (i: number, v: string) => void;
   onRemoveOption: (i: number) => void;
 }) {
-  if (type === 'short') {
-    return <input className={style.input} placeholder="Short answer text" disabled />;
+  const hasOptions = ['multiple_choice', 'checkboxes', 'dropdown'].includes(type);
+
+  if (!hasOptions) {
+    return null;
   }
 
-  if (type === 'paragraph') {
-    return <textarea className={style.textarea} placeholder="Long answer text" rows={3} disabled />;
-  }
-
-  if (type === 'date') {
-    return <input className={style.input} type="date" disabled style={{ maxWidth: 200 }} />;
-  }
-
-  if (type === 'time') {
-    return <input className={style.input} type="time" disabled style={{ maxWidth: 160 }} />;
-  }
-
-  if (type === 'linear_scale') {
-    return (
-      <div style={{ display: 'flex', gap: 8, alignItems: 'center', fontSize: 14, color: '#555' }}>
-        {[1, 2, 3, 4, 5].map(n => (
-          <label key={n} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
-            <input type="radio" disabled style={{ accentColor: '#673ab7' }} />
-            {n}
-          </label>
-        ))}
-      </div>
-    );
-  }
-
-  if (type === 'dropdown') {
-    return (
-      <div>
-        {options.map((opt, i) => (
-          <div key={i} className={style.optionRow}>
-            <span style={{ color: '#9e9e9e', fontSize: 14 }}>{i + 1}.</span>
-            <input
-              type="text"
-              value={opt}
-              onChange={e => onUpdateOption(i, e.target.value)}
-            />
-            <button className={style.removeBtn} onClick={() => onRemoveOption(i)}>×</button>
-          </div>
-        ))}
-        <button className={style.addOptionBtn} onClick={onAddOption}>+ Add option</button>
-      </div>
-    );
-  }
-
-  const inputType = type === 'checkboxes' ? 'checkbox' : 'radio';
   return (
-    <div>
-      {options.map((opt, i) => (
-        <div key={i} className={style.optionRow}>
-          <input type={inputType} disabled style={{ accentColor: '#673ab7' }} />
+    <div className={style.answerPreview}>
+      {options.map((option, index) => (
+        <div key={index} className={style.optionRow}>
           <input
-            type="text"
-            value={opt}
-            onChange={e => onUpdateOption(i, e.target.value)}
+            className={style.optionInput}
+            value={option}
+            onChange={e => onUpdateOption(index, e.target.value)}
+            placeholder={`Option ${index + 1}`}
           />
-          <button className={style.removeBtn} onClick={() => onRemoveOption(i)}>×</button>
+          <button
+            type="button"
+            className={style.removeOptionBtn}
+            onClick={() => onRemoveOption(index)}
+            title="Remove option"
+          >
+            ✕
+          </button>
         </div>
       ))}
-      <button className={style.addOptionBtn} onClick={onAddOption}>+ Add option</button>
+      <button type="button" className={style.addOptionBtn} onClick={onAddOption}>
+        + Add option
+      </button>
     </div>
   );
-  
 }
