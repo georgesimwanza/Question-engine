@@ -323,5 +323,4 @@ function AnswerPreview({
       <button className={style.addOptionBtn} onClick={onAddOption}>+ Add option</button>
     </div>
   );
-  
 }
