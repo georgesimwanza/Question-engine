@@ -1,9 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
+import bcrypt from 'bcryptjs';
+import connectToMongoDb from '@/app/lib/connect';
+import User from '@/models/User';
 
 export async function POST(req: NextRequest) {
   try {
     const { username, email, password } = await req.json();
 
+    await connectToMongoDb();
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    await User.create({ username, email, password: hashedPassword });
+    
     if (!username || !email || !password) {
       return NextResponse.json(
         { error: 'All fields are required' },
@@ -24,4 +32,8 @@ export async function POST(req: NextRequest) {
       { status: 500 }
     );
   }
+
+ 
 }
+
+ 

@@ -1,0 +1,168 @@
+
+
+.pageWrapper {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-image: url('/bg.jpg');
+  background-size: cover;
+  background-position: center;
+  font-family: 'Poppins', 'Segoe UI', sans-serif;
+}
+
+.card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 2.5rem 2rem;
+  width: 360px;
+  max-width: 95vw;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+.tabRow {
+  display: flex;
+  background: #f0f0f0;
+  border-radius: 50px;
+  padding: 4px;
+  margin-bottom: 2rem;
+}
+
+.tab {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  background: transparent;
+  border-radius: 50px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  color: #888;
+  transition: all 0.3s ease;
+}
+
+.tabActive {
+  background: linear-gradient(135deg, #ff416c, #ff9a44);
+  color: #ffffff;
+  box-shadow: 0 4px 15px rgba(255, 65, 108, 0.35);
+}
+
+/* ── Social buttons ── */
+.socialRow {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  margin-bottom: 1.8rem;
+}
+
+.socialBtn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1.5px solid #e0e0e0;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: border-color 0.2s, transform 0.15s;
+}
+
+.socialBtn:hover {
+  border-color: #ff416c;
+  transform: translateY(-1px);
+}
+
+/* ── Form fields ── */
+.formFields {
+  display: flex;
+  flex-direction: column;
+}
+
+.field {
+  margin-bottom: 0.75rem;
+}
+
+.input {
+  width: 100%;
+  border: none;
+  border-bottom: 1.5px solid #e0e0e0;
+  padding: 10px 0;
+  font-family: inherit;
+  font-size: 14px;
+  color: #333;
+  background: transparent;
+  outline: none;
+  transition: border-color 0.25s;
+}
+
+.input::placeholder {
+  color: #bbb;
+  font-size: 13px;
+}
+
+.input:focus {
+  border-bottom-color: #ff416c;
+}
+
+/* ── Remember me ── */
+.remember {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #888;
+  cursor: pointer;
+  margin: 0.8rem 0 1.4rem;
+}
+
+.remember input[type='checkbox'] {
+  accent-color: #ff416c;
+  width: 14px;
+  height: 14px;
+  cursor: pointer;
+}
+
+/* ── Submit button ── */
+.submitBtn {
+  width: 100%;
+  padding: 13px;
+  border: none;
+  border-radius: 50px;
+  background: linear-gradient(135deg, #ff416c, #ff9a44);
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  letter-spacing: 0.4px;
+  transition: opacity 0.2s, transform 0.15s;
+  margin-top: 0.25rem;
+}
+
+.submitBtn:hover {
+  opacity: 0.88;
+  transform: translateY(-1px);
+}
+
+.submitBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ── Feedback messages ── */
+.error {
+  color: #e53e3e;
+  font-size: 13px;
+  margin-bottom: 0.75rem;
+  text-align: center;
+}
+
+.success {
+  color: #38a169;
+  font-size: 13px;
+  margin-bottom: 0.75rem;
+  text-align: center;
+}
