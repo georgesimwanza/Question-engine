@@ -67,7 +67,6 @@ export default function FillFormPage() {
   }
 
   async function handleSubmit() {
-    // Check required questions
     const unanswered = form!.questions.filter(q => {
       if (!q.required) return false;
       const val = answers[q._id];
@@ -222,9 +221,7 @@ export default function FillFormPage() {
             </div>
           )}
         </div>
-      ))}
-
-      {/* Submit */}
+      ))} 
       <button
         onClick={handleSubmit}
         disabled={submitting}

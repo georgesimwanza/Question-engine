@@ -1,7 +1,7 @@
 import Form from '@/models/Form';
 import connect from '@/app/lib/connect';
 import { NextRequest } from 'next/server';
-import { Question } from '@/../src/app/forms/form';
+import { Question } from '@/app/forms/page';
 
 export async function POST(req: NextRequest) {
   await connect();

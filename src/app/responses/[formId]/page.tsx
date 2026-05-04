@@ -35,7 +35,7 @@ export default function ResponsesPage() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!formId) return;  // ← guard
+    if (!formId) return;  
 
     async function fetchResponses() {
       try {
