@@ -43,9 +43,9 @@
 }
 
 .tabActive {
-  background: linear-gradient(135deg, #ff416c, #ff9a44);
+  background: linear-gradient(135deg, black, white);
   color: #ffffff;
-  box-shadow: 0 4px 15px rgba(255, 65, 108, 0.35);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.35);
 }
 
 /* ── Social buttons ── */
@@ -130,7 +130,7 @@
   padding: 13px;
   border: none;
   border-radius: 50px;
-  background: linear-gradient(135deg, #ff416c, #ff9a44);
+  background: linear-gradient(135deg, black, rgb(223, 217, 217));
   color: #ffffff;
   font-family: inherit;
   font-size: 15px;
@@ -154,7 +154,7 @@
 
 /* ── Feedback messages ── */
 .error {
-  color: #e53e3e;
+  color: #000000;
   font-size: 13px;
   margin-bottom: 0.75rem;
   text-align: center;

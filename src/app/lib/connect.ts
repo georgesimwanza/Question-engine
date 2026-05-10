@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const MongoDb_Url = "mongodb://localhost:27017/Engine";
+const MongoDb_Url = process.env.MONGODB_URL;
 
 if(!MongoDb_Url){
     throw new Error("wrong mongo db url");
@@ -14,7 +14,7 @@ async function connectToMongoDb(){
     }
 
     if(!cached.promise){
-        cached.promise = mongoose.connect(MongoDb_Url);
+        cached.promise = mongoose.connect(MongoDb_Url as string);
     }
 
     cached.conn = await cached.promise;
