@@ -1,7 +1,6 @@
 'use client'
 import { useRouter } from 'next/navigation';
 import styles from './landing.module.css';
-import { navigate } from 'next/dist/client/components/segment-cache/navigation';
 const TEMPLATES = [
   { label: 'Blank form', blank: true },
   { label: 'Contact info', color: 'blue' },

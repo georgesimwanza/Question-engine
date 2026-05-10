@@ -1,7 +1,9 @@
 'use client';
 import { useState } from 'react';
 import styles from './authpages.module.css';
-
+import { signIn } from 'next-auth/react';
+import LandingPage from '@/app/landing/page';
+import { useRouter } from 'next/navigation';
 export default function AuthPage() {
   const [activeTab, setActiveTab] = useState<'login' | 'register'>('login');
 
@@ -19,23 +21,29 @@ export default function AuthPage() {
   const [regSuccess, setRegSuccess] = useState('');
   const [regLoading, setRegLoading] = useState(false);
 
+  const router = useRouter();
+
   const handleLogin = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setLoginError('');
     setLoginLoading(true);
-    try {
-      const res = await fetch('/api/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username: loginUsername, password: loginPassword}),
-      });
-      const data = await res.json();
-      if (!res.ok) setLoginError(data.error || 'Login failed.');
-    } catch {
-      setLoginError('Network error. Please try again.');
-    } finally {
-      setLoginLoading(false);
+   try {
+    const result = await signIn('credentials', {
+      username: loginUsername,
+      password: loginPassword,
+      redirect: false, 
+    });
+
+    if (result?.error) {
+      setLoginError('Invalid username or password.');
+    } else {
+      router.push('/landing');
     }
+  } catch {
+    setLoginError('Network error. Please try again.');
+  } finally {
+    setLoginLoading(false);
+  }
   };
 
   const handleRegister = async (e: React.MouseEvent<HTMLButtonElement>) => {
