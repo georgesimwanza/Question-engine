@@ -153,13 +153,3 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ---
 
-## ⚠️ Known Issues
-
-- `src/models/Responce.ts` has a typo — should be renamed to `Response.ts`
-- The `form/form.tsx` file under `src/app/form/` appears unused; the active form builder is at `src/app/forms/page.tsx`
-
----
-
-## 📄 License
-
-MIT
