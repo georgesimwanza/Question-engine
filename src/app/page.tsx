@@ -1,9 +1,14 @@
-import Image from "next/image";
-import Form from "./forms/page";
-import LandingPage from "@/app/landing/page";
-import AuthPage from "./AuthPage/authpage";
-export default function Home() {
-  return (
-    <AuthPage/>
-  );
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/lib/authOptions";
+import { redirect } from "next/navigation";
+import AuthPage from "./AuthPage/page";
+
+export default async function Home() {
+  const session = await getServerSession(authOptions);
+
+  if (session) {
+    redirect("/landing");
+  }
+
+  return <AuthPage />;
 }

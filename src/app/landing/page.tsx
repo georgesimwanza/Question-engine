@@ -1,6 +1,9 @@
 'use client'
+import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 import styles from './landing.module.css';
+
 const TEMPLATES = [
   { label: 'Blank form', blank: true },
   { label: 'Contact info', color: 'blue' },
@@ -13,15 +16,27 @@ const RECENT_FORMS = [
   { id: 2, name: 'Untitled form', date: 'Opened 14:56' },
   { id: 3, name: 'Untitled form', date: 'Opened 11 Jan 2024' },
 ];
+
 export default function LandingPage() {
-  const router= useRouter();
+  const router = useRouter();
+  const { data: session, status } = useSession();
+
+  useEffect(() => {
+    if (status === 'unauthenticated') {
+      router.push('/AuthPage');
+    }
+  }, [status, router]);
+
+  if (status === 'loading') return <p>Loading...</p>;
+  if (!session) return null;
+
   return (
     <div className={styles.page}>
       <section>
         <p className={styles.sectionTitle}>Start a new form</p>
         <div className={styles.newFormGrid}>
           {TEMPLATES.map((t) => (
-            <div key={t.label} className={styles.formCard}onClick={() => t.blank && router.push('/forms')}>
+            <div key={t.label} className={styles.formCard} onClick={() => t.blank && router.push('/forms')}>
               <div className={`${styles.cardThumb} ${t.blank ? styles.blankThumb : styles[t.color + 'Thumb']}`}>
                 {t.blank ? (
                   <div className={styles.plusIcon} />

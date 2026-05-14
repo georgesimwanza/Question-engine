@@ -9,6 +9,11 @@ const ResponseSchema = new mongoose.Schema(
   {
     formId: { type: mongoose.Schema.Types.ObjectId, ref: 'Form', required: true },
     answers: [AnswerSchema],
+    respondent: {
+      userId: { type: String, required: true },
+      name:   { type: String },
+      email:  { type: String },
+    },
   },
   { timestamps: true }
 );

@@ -1,5 +1,7 @@
 "use client";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 import style from './form.module.css';
 
 type QuestionType =
@@ -34,6 +36,17 @@ const QUESTION_TYPES: { value: QuestionType; label: string }[] = [
 let nextId = 1;
 
 export default function Form() {
+  const router = useRouter();
+    const { data: session, status } = useSession();
+  
+    useEffect(() => {
+      if (status === 'unauthenticated') {
+        router.push('/AuthPage');
+      }
+    }, [status, router]);
+  
+    if (status === 'loading') return <p>Loading...</p>;
+    if (!session) return null;
   const [title, setTitle] = useState('Untitled form');
   const [description, setDescription] = useState('Form description');
   const [questions, setQuestions] = useState<Question[]>([
