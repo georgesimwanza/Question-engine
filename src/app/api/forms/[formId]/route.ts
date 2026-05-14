@@ -1,17 +1,21 @@
 // app/api/forms/[formId]/route.ts
 import Form from '@/models/Form';
 import connect from '@/app/lib/connect';
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
+import { requireAuth } from '@/app/lib/requireAuth';
 
 export async function GET(
   _req: NextRequest,
   { params }: { params: Promise<{ formId: string }> }
 ) {
+  const { session, error } = await requireAuth();
+  if (error) return error;
+
   await connect();
   const { formId } = await params;
 
   const form = await Form.findById(formId);
-  if (!form) return Response.json({ error: 'Form not found' }, { status: 404 });
+  if (!form) return NextResponse.json({ error: 'Form not found' }, { status: 404 });
 
-  return Response.json(form);
+  return NextResponse.json(form);
 }
