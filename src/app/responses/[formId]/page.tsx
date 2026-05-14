@@ -7,10 +7,16 @@ interface Answer {
   value: string | string[] | number;
 }
 
+interface Respondent {
+  name: string;
+  email: string;
+}
+
 interface FormResponse {
   _id: string;
   createdAt: string;
   answers: Answer[];
+  respondent?: Respondent;
 }
 
 interface Question {
@@ -27,7 +33,7 @@ interface Form {
 
 export default function ResponsesPage() {
   const params = useParams();
-  const formId = params.formId as string;  // ← fix
+  const formId = params.formId as string;
 
   const [form, setForm] = useState<Form | null>(null);
   const [responses, setResponses] = useState<FormResponse[]>([]);
@@ -35,7 +41,7 @@ export default function ResponsesPage() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!formId) return;  
+    if (!formId) return;
 
     async function fetchResponses() {
       try {
@@ -44,7 +50,7 @@ export default function ResponsesPage() {
         const data = await res.json();
         setForm(data.form);
         setResponses(data.responses);
-      } catch (err) {
+      } catch {
         setError('Could not load responses.');
       } finally {
         setLoading(false);
@@ -62,7 +68,36 @@ export default function ResponsesPage() {
 
   return (
     <div style={{ maxWidth: 800, margin: '0 auto', padding: 32, fontFamily: 'sans-serif' }}>
-      <h1 style={{ fontSize: 24, fontWeight: 600 }}>{form.title}</h1>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+        <h1 style={{ fontSize: 24, fontWeight: 600 }}>{form.title}</h1>
+
+        {/* ✅ Download button */}
+        <button
+          onClick={async () => {
+            const res = await fetch(`/api/responses/${formId}/export`);
+            const blob = await res.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `responses-${formId}.xlsx`;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+          }}
+          style={{
+            background: '#673ab7',
+            color: '#fff',
+            padding: '8px 18px',
+            borderRadius: 4,
+            fontSize: 14,
+            textDecoration: 'none',
+          }}
+        >
+          Download Excel
+        </button>
+      </div>
+
       <p style={{ color: '#555', marginBottom: 24 }}>{form.description}</p>
       <p style={{ color: '#888', fontSize: 14, marginBottom: 32 }}>
         {responses.length} response{responses.length !== 1 ? 's' : ''}
@@ -79,9 +114,17 @@ export default function ResponsesPage() {
             marginBottom: 16,
             background: '#fafafa',
           }}>
-            <p style={{ fontSize: 13, color: '#888', marginBottom: 16 }}>
+            <p style={{ fontSize: 13, color: '#888', marginBottom: 4 }}>
               Response #{i + 1} — {new Date(response.createdAt).toLocaleString()}
             </p>
+
+            {/* ✅ Show who responded */}
+            {response.respondent && (
+              <p style={{ fontSize: 13, color: '#673ab7', marginBottom: 16 }}>
+                👤 {response.respondent.name} — {response.respondent.email}
+              </p>
+            )}
+
             {response.answers.map((answer) => {
               const question = questionMap[answer.questionId];
               return (
